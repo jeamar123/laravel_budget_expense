@@ -25,7 +25,7 @@ class ExpensesController extends Controller
         $query = Expenses::where( 'user_id', $request->user()->id );
 
         if( $request->has('start') && $request->has('end') ) {
-            $query->whereBetween('date', [$request->get('start'), $request->get('end')]);
+            $query->whereBetween('date', [$request->get('start'), date('Y-m-d 23:59:59', strtotime($request->get('end'))) ]);
         }
 
         if( $request->has('limitTo') ) {
@@ -33,7 +33,6 @@ class ExpensesController extends Controller
         }
 
         $expenses = $query->orderBy('date', 'DESC')->get();
-
         $total = 0;
 
         foreach ($expenses as $index => $obj) {
@@ -263,7 +262,7 @@ class ExpensesController extends Controller
         $monthEnd = date('Y-m-d', strtotime( 'last day of ' . $monthYear ));
 
         $expenses = Expenses::where( 'user_id', $request->user()->id )
-                            ->whereBetween('date', [$request->get('start'), $request->get('end')])
+                            ->whereBetween('date', [$request->get('start'), date('Y-m-d 23:59:59', strtotime($request->get('end')))])
                             ->selectRaw(
                                 'sum(amount) as total, round(AVG(amount),0) as average',
                             )

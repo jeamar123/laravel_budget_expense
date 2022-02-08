@@ -21,7 +21,7 @@ class BudgetController extends Controller
         $query = Budget::where( 'user_id', $request->user()->id );
         
         if( $request->has('start') && $request->has('end') ) {
-            $query->whereBetween('date', [$request->get('start'), $request->get('end')]);
+            $query->whereBetween('date', [$request->get('start'), date('Y-m-d 23:59:59', strtotime($request->get('end')))]);
         }
 
         $budgets = $query->orderBy('date', 'ASC')->get();

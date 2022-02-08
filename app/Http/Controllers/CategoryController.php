@@ -200,7 +200,7 @@ class CategoryController extends Controller
 
         $thisMonthText = date('F', strtotime($request->get('start')));
         $thisMonthStart = $request->get('start');
-        $thisMonthEnd = $request->get('end');
+        $thisMonthEnd = date('Y-m-d 23:59:59', strtotime($request->get('end')));
 
         $expenses = Expenses::where( 'user_id', $request->user()->id )
                             ->whereBetween('date', [$thisMonthStart, $thisMonthEnd])
